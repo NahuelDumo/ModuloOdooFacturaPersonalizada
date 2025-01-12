@@ -19,15 +19,32 @@ class AccountInvoice(models.Model):
                     credit_total = sum(line.credit for line in invoice.line_ids)
                     difference = debit_total - credit_total
 
+                    # Añadir el impuesto del IVA 21% si la diferencia es significativa
                     if difference != 0:
-                        # Crear una línea contable para balancear el asiento
+                        # Calcular el impuesto IVA 21% basado en la diferencia
+                        iva_percentage = 21 / 100
+                        iva_amount = difference * iva_percentage
+
+                        # Crear una línea contable para balancear el asiento, con el IVA
                         balancing_line = {
                             'move_id': invoice.id,
                             'account_id': invoice.journal_id.default_account_id.id,
                             'debit': abs(difference) if difference < 0 else 0.0,
                             'credit': abs(difference) if difference > 0 else 0.0,
                         }
+
+                        # Agregar la línea del IVA
+                        iva_line = {
+                            'move_id': invoice.id,
+                            'account_id': invoice.company_id.account_tax_collected_id.id,  # Cuenta del IVA 21% configurada en la compañía
+                            'debit': iva_amount if iva_amount < 0 else 0.0,
+                            'credit': iva_amount if iva_amount > 0 else 0.0,
+                            'name': 'Ajuste IVA 21%',
+                        }
+
+                        # Crear las líneas contables
                         invoice.sudo().line_ids.create(balancing_line)
+                        invoice.sudo().line_ids.create(iva_line)
 
                     # Eliminar las líneas contables (si es necesario para corregir inconsistencias)
                     invoice.sudo().line_ids.unlink()
