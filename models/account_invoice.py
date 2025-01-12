@@ -6,15 +6,18 @@ class AccountInvoice(models.Model):
     def force_draft_invoices(self):
         for invoice in self:
             if invoice.state != 'draft':
-                # Verificar si el asiento está publicado (estado 'posted')
+                # Si el estado es 'posted', despublicar el asiento contable relacionado
                 if invoice.state == 'posted':
-                    # Desvincular las líneas de asiento si están publicadas
-                    for line in invoice.line_ids:
-                        line.unlink()
+                    # Verificar si hay líneas contables asociadas
+                    if invoice.line_ids:
+                        # Forzar la despublicación de los asientos contables relacionados
+                        for line in invoice.line_ids:
+                            move = line.move_id
+                            if move.state == 'posted':
+                                move.sudo().button_draft()
+                        # Eliminar las líneas contables para desvincular el asiento
+                        invoice.sudo().line_ids.unlink()
 
-                    # Cancelar el asiento contable antes de cambiar el estado de la factura
-                    invoice.sudo().button_cancel()
-
-                # Forzar el cambio de estado a 'draft' de la factura
+                # Forzar el cambio de estado de la factura a 'draft'
                 invoice.sudo().button_draft()
         return True
