@@ -8,6 +8,10 @@ class AccountInvoice(models.Model):
             if invoice.state != 'draft':
                 # Verificar si el asiento está publicado (estado 'posted')
                 if invoice.state == 'posted':
+                    # Desvincular las líneas de asiento si están publicadas
+                    for line in invoice.line_ids:
+                        line.unlink()
+
                     # Cancelar el asiento contable antes de cambiar el estado de la factura
                     invoice.sudo().button_cancel()
 
