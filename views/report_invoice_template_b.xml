@@ -41,7 +41,7 @@
                     <p>CAE: <t t-esc="o.x_cae_number"/></p>
                     <p>Vencimiento CAE: <t t-esc="o.x_cae_due_date"/></p>
                     <div class="qr-code">
-                        <img t-att-src="/report/barcode/?type=QR&value=%s" t-att-src-esc="o._get_invoice_qr_data()"/>
+                        <img t-att-src="'/report/barcode/?type=QR&amp;value=' + o._get_invoice_qr_data()"/>
                     </div>
                 </div>
             </div>
