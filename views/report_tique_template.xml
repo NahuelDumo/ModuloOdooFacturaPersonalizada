@@ -1,0 +1,50 @@
+<odoo>
+    <template id="report_tique_document" inherit_id="account.report_invoice_document">
+        <xpath expr="//div[@class='page']" position="replace">
+            <div class="page">
+                <div class="header">
+                    <h1>Tique</h1>
+                    <p>VEO Imagen y Comunicación S.A.S.</p>
+                    <p>La Alameda 4664 - Mendiolaza - Córdoba - Argentina</p>
+                    <p>Tel: +54 0351 589-2885</p>
+                </div>
+                <div class="client-info">
+                    <p>Cliente: <t t-esc="o.partner_id.name"/></p>
+                    <p>CUIT: <t t-esc="o.partner_id.vat"/></p>
+                    <p>Cond. IVA: <t t-esc="o.partner_id.l10n_latam_identification_type_id.name"/></p>
+                </div>
+                <div class="invoice-details">
+                    <p>Nro: <t t-esc="o.name"/></p>
+                    <p>Fecha: <t t-esc="o.invoice_date"/></p>
+                </div>
+                <div class="products-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Descripción</th>
+                                <th>Cantidad</th>
+                                <th>Precio Unitario</th>
+                                <th>Importe</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="o.invoice_line_ids" t-as="line">
+                                <td><t t-esc="line.name"/></td>
+                                <td><t t-esc="line.quantity"/></td>
+                                <td><t t-esc="line.price_unit"/></td>
+                                <td><t t-esc="line.price_subtotal"/></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="footer">
+                    <p>CAE: <t t-esc="o.x_cae_number"/></p>
+                    <p>Vencimiento CAE: <t t-esc="o.x_cae_due_date"/></p>
+                    <div class="qr-code">
+                        <img t-att-src="/report/barcode/?type=QR&value=%s" t-att-src-esc="o._get_invoice_qr_data()"/>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+    </template>
+</odoo>

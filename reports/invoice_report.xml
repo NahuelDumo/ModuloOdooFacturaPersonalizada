@@ -1,0 +1,30 @@
+
+<odoo>
+    <report
+        id="action_report_invoice_a"
+        model="account.move"
+        string="Factura A"
+        report_type="qweb-pdf"
+        name="module_name.report_invoice_document_a"
+        file="module_name.report_invoice_document_a"
+        print_report_name="(object.name or 'Factura A') + '.pdf'"
+    />
+    <report
+        id="action_report_invoice_b"
+        model="account.move"
+        string="Factura B"
+        report_type="qweb-pdf"
+        name="module_name.report_invoice_document_b"
+        file="module_name.report_invoice_document_b"
+        print_report_name="(object.name or 'Factura B') + '.pdf'"
+    />
+    <report
+        id="action_report_tique"
+        model="account.move"
+        string="Tique"
+        report_type="qweb-pdf"
+        name="module_name.report_tique_document"
+        file="module_name.report_tique_document"
+        print_report_name="(object.name or 'Tique') + '.pdf'"
+    />
+</odoo>
