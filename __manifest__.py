@@ -6,11 +6,13 @@
     "summary": "Diseño personalizado de facturas con QR y CAE.",
     "description": "Este módulo agrega un diseño personalizado de factura, integrando datos del CAE y un código QR según normativa AFIP.",
     "data": [
+        "views/account_move_form.xml",
         "views/report_invoice_template_a.xml",
         "views/report_invoice_template_b.xml",
         "views/report_tique_template.xml",
         "reports/invoice_report.xml",
     ],
+
     "installable": True,
     "application": False,
 }
